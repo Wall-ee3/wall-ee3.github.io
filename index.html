@@ -4,25 +4,28 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Relatório da OP</title>
+
 <style>
     body {
         font-family: Arial, sans-serif;
-        background: #f3f3f3;
+        background: #e9e9e9;
         padding: 20px;
+        margin: 0;
     }
 
     .card {
         background: white;
-        max-width: 500px;
-        margin: auto;
-        padding: 20px;
-        box-shadow: 0 0 12px rgba(0,0,0,0.2);
-        border-radius: 12px;
+        max-width: 520px;
+        margin: 30px auto;
+        padding: 25px;
+        box-shadow: 0 0 15px rgba(0,0,0,0.2);
+        border-radius: 14px;
     }
 
     h2 {
         text-align: center;
-        margin-bottom: 20px;
+        margin-bottom: 25px;
+        font-size: 26px;
     }
 
     table {
@@ -31,15 +34,16 @@
     }
 
     td {
-        padding: 10px;
+        padding: 12px 8px;
         border-bottom: 1px solid #ddd;
+        font-size: 18px;
     }
 
     .label {
         font-weight: bold;
         width: 40%;
+        color: #333;
     }
-
 </style>
 </head>
 <body>
@@ -60,16 +64,17 @@
 </div>
 
 <script>
-// Lê os parâmetros da URL (os dados do QR Code)
+// Lê os parâmetros da URL corretamente
 const params = new URLSearchParams(window.location.search);
 
-document.getElementById("op").innerText = params.get("OP") || "";
-document.getElementById("item").innerText = params.get("Item") || "";
-document.getElementById("prev").innerText = params.get("Prevista") || "";
-document.getElementById("prod").innerText = params.get("Produzida") || "";
-document.getElementById("status").innerText = params.get("Status") || "";
-document.getElementById("obs").innerText = params.get("Obs") || "";
-document.getElementById("inicio").innerText = params.get("Inicio") || "";
+// Preenche os dados automaticamente
+document.getElementById("op").innerText      = params.get("OP") || "";
+document.getElementById("item").innerText    = params.get("Item") || "";
+document.getElementById("prev").innerText    = params.get("Prevista") || "";
+document.getElementById("prod").innerText    = params.get("Produzida") || "";
+document.getElementById("status").innerText  = params.get("Status") || "";
+document.getElementById("obs").innerText     = params.get("Obs") || "";
+document.getElementById("inicio").innerText  = params.get("Inicio") || "";
 document.getElementById("termino").innerText = params.get("Termino") || "";
 </script>
 
