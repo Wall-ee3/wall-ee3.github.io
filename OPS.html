@@ -114,28 +114,50 @@ function getParam(name) {
     return url.searchParams.get(name) || "";
 }
 
-// Pega o Código Fixo (ID) e a OP verdadeira
-const id = getParam("ID");      // Código Fixo
-const op = getParam("OP");      // OP verdadeira
+// Pega todos os campos da URL
+const id = getParam("ID");
+const op = getParam("OP");
+const item = getParam("Item");
+const prevista = getParam("Prevista");
+const produzida = getParam("Produzida");
+const status = getParam("Status");
+const obs = getParam("Obs");
+const localx = getParam("Local");
+const turno = getParam("Turno");
+const inicio = getParam("Inicio");
+const termino = getParam("Termino");
 
-// Preenche campos
+// Preenche os campos da página
 document.getElementById("op").innerText = op;
-document.getElementById("item").innerText = getParam("Item");
-document.getElementById("prev").innerText = getParam("Prevista");
-document.getElementById("prod").innerText = getParam("Produzida");
-document.getElementById("status").innerText = getParam("Status");
-document.getElementById("obs").innerText = getParam("Obs");
-document.getElementById("local").innerText = getParam("Local");
-document.getElementById("turno").innerText = getParam("Turno");
-document.getElementById("inicio").innerText = getParam("Inicio");
-document.getElementById("termino").innerText = getParam("Termino");
+document.getElementById("item").innerText = item;
+document.getElementById("prev").innerText = prevista;
+document.getElementById("prod").innerText = produzida;
+document.getElementById("status").innerText = status;
+document.getElementById("obs").innerText = obs;
+document.getElementById("local").innerText = localx;
+document.getElementById("turno").innerText = turno;
+document.getElementById("inicio").innerText = inicio;
+document.getElementById("termino").innerText = termino;
 
-// QR FIXO baseado no Código Fixo
-const qrLink = "https://wall-ee3.github.io/OPS.html?ID=" + encodeURIComponent(id);
+// 🔥 GERA O LINK COMPLETO LIMPO
+const fullLink = 
+    `https://wall-ee3.github.io/OPS.html?` +
+    `ID=${encodeURIComponent(id)}` +
+    `&OP=${encodeURIComponent(op)}` +
+    `&Item=${encodeURIComponent(item)}` +
+    `&Prevista=${encodeURIComponent(prevista)}` +
+    `&Produzida=${encodeURIComponent(produzida)}` +
+    `&Status=${encodeURIComponent(status)}` +
+    `&Obs=${encodeURIComponent(obs)}` +
+    `&Inicio=${encodeURIComponent(inicio)}` +
+    `&Termino=${encodeURIComponent(termino)}` +
+    `&Local=${encodeURIComponent(localx)}` +
+    `&Turno=${encodeURIComponent(turno)}`;
 
+// 📌 QR CODE do link REAL e COMPLETO
 document.getElementById("qrImg").src =
     "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" +
-    encodeURIComponent(qrLink);
+    encodeURIComponent(fullLink);
 </script>
 
 </body>
