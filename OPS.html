@@ -1,78 +1,78 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dados da OP</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Relatório da OP</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f3f3f3;
+        padding: 20px;
+    }
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #111;
-            color: white;
-            padding: 20px;
-        }
+    .card {
+        background: white;
+        max-width: 500px;
+        margin: auto;
+        padding: 20px;
+        box-shadow: 0 0 12px rgba(0,0,0,0.2);
+        border-radius: 12px;
+    }
 
-        h1 {
-            text-align: center;
-            margin-bottom: 30px;
-        }
+    h2 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
 
-        .box {
-            background: #1e1e1e;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 10px;
-        }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
 
-        .title {
-            font-weight: bold;
-            color: #4caf50;
-        }
-    </style>
+    td {
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .label {
+        font-weight: bold;
+        width: 40%;
+    }
+</style>
 </head>
 <body>
 
-    <h1>Dados da OP</h1>
+<div class="card">
+    <h2>Relatório da OP</h2>
 
-    <div id="dados"></div>
+    <table>
+        <tr><td class="label">OP</td><td id="op"></td></tr>
+        <tr><td class="label">Item</td><td id="item"></td></tr>
+        <tr><td class="label">Qtd Prevista</td><td id="prev"></td></tr>
+        <tr><td class="label">Qtd Produzida</td><td id="prod"></td></tr>
+        <tr><td class="label">Status</td><td id="status"></td></tr>
+        <tr><td class="label">Observação</td><td id="obs"></td></tr>
+        <tr><td class="label">Data de Início</td><td id="inicio"></td></tr>
+        <tr><td class="label">Data de Término</td><td id="termino"></td></tr>
+        <tr><td class="label">Local</td><td id="local"></td></tr>
+    </table>
+</div>
 
-    <script>
-        function getParams() {
-            const urlParams = new URLSearchParams(window.location.search);
-            return {
-                OP: urlParams.get("OP"),
-                Item: urlParams.get("Item"),
-                Prevista: urlParams.get("Prevista"),
-                Produzida: urlParams.get("Produzida"),
-                Status: urlParams.get("Status"),
-                Obs: urlParams.get("Obs"),
-                Inicio: urlParams.get("Inicio"),
-                Termino: urlParams.get("Termino")
-            };
-        }
+<script>
+// Lê os parâmetros da URL enviados pelo QR Code
+const params = new URLSearchParams(window.location.search);
 
-        function mostrarDados() {
-            const d = getParams();
-
-            let html = "";
-
-            for (const chave in d) {
-                if (d[chave] !== null) {
-                    html += `
-                        <div class="box">
-                            <div class="title">${chave}</div>
-                            ${decodeURIComponent(d[chave])}
-                        </div>
-                    `;
-                }
-            }
-
-            document.getElementById("dados").innerHTML = html;
-        }
-
-        mostrarDados();
-    </script>
+document.getElementById("op").innerText = params.get("OP") || "";
+document.getElementById("item").innerText = params.get("Item") || "";
+document.getElementById("prev").innerText = params.get("Prevista") || "";
+document.getElementById("prod").innerText = params.get("Produzida") || "";
+document.getElementById("status").innerText = params.get("Status") || "";
+document.getElementById("obs").innerText = params.get("Obs") || "";
+document.getElementById("inicio").innerText = params.get("Inicio") || "";
+document.getElementById("termino").innerText = params.get("Termino") || "";
+document.getElementById("local").innerText = params.get("Local") || "";
+</script>
 
 </body>
 </html>
