@@ -1,121 +1,16 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Relatório da OP</title>
-
-<style>
-    body {
-        font-family: Arial, sans-serif;
-        background: #f3f3f3;
-        padding: 20px;
-    }
-
-    .card {
-        background: white;
-        max-width: 500px;
-        margin: auto;
-        padding: 20px;
-        box-shadow: 0 0 12px rgba(0,0,0,0.2);
-        border-radius: 12px;
-    }
-
-    h2 {
-        text-align: center;
-        margin-bottom: 20px;
-    }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-
-    td {
-        padding: 10px;
-        border-bottom: 1px solid #ddd;
-    }
-
-    .label {
-        font-weight: bold;
-        width: 40%;
-    }
-
-    #qr {
-        text-align: center;
-        margin-top: 20px;
-    }
-
-    .btn {
-        margin-top: 20px;
-        padding: 12px;
-        width: 100%;
-        background: #2c7be5;
-        color: white;
-        border: none;
-        border-radius: 8px;
-        font-size: 16px;
-        cursor: pointer;
-    }
-
-    .btn2 {
-        margin-top: 10px;
-        padding: 12px;
-        width: 100%;
-        background: #444;
-        color: white;
-        border: none;
-        border-radius: 8px;
-        font-size: 16px;
-        cursor: pointer;
-    }
-
-    @media print {
-        .btn, .btn2 {
-            display: none;
-        }
-    }
-</style>
-</head>
-<body>
-
-<div class="card" id="relatorioCard">
-
-    <img src="quantum.png" alt="Logo Quantum" style="width:130px; display:block; margin:0 auto 10px auto;">
-
-    <h2>Relatório da OP</h2>
-
-    <table>
-        <tr><td class="label">OP</td><td id="op"></td></tr>
-        <tr><td class="label">Item</td><td id="item"></td></tr>
-        <tr><td class="label">Qtd Prevista</td><td id="prev"></td></tr>
-        <tr><td class="label">Qtd Produzida</td><td id="prod"></td></tr>
-        <tr><td class="label">Status</td><td id="status"></td></tr>
-        <tr><td class="label">Observação</td><td id="obs"></td></tr>
-        <tr><td class="label">Local</td><td id="local"></td></tr>
-        <tr><td class="label">Turno</td><td id="turno"></td></tr>
-        <tr><td class="label">Data de Início</td><td id="inicio"></td></tr>
-        <tr><td class="label">Data de Término</td><td id="termino"></td></tr>
-    </table>
-
-    <div id="qr">
-        <h3>QR Code</h3>
-        <img id="qrImg" src="" width="180">
-    </div>
-</div>
-
-<button class="btn" onclick="window.print()">Salvar PDF</button>
-<button class="btn2" onclick="window.print()">Imprimir</button>
-
 <script>
-// Função para coletar parâmetros da URL
+// Função para coletar parâmetros da URL (case-insensitive e sem espaços)
 function getParam(name) {
     const url = new URL(window.location.href);
-    return url.searchParams.get(name) || "";
+    for (const [key, value] of url.searchParams.entries()) {
+        if (key.toLowerCase() === name.toLowerCase()) return value.trim();
+    }
+    return "";
 }
 
-// Código Fixo vindo da URL
+// Pega o Código Fixo da URL
 const codigoFixo = getParam("ID");
+console.log("Código Fixo capturado:", codigoFixo); // Para debug
 
 // ID da sua planilha
 const sheetID = "1i2mCgUtb6swVZ8PAyA8HwnO-jVPwPurIywReqZfqChs";
@@ -127,11 +22,11 @@ const csvURL = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=ou
 // Converte CSV em JSON
 function csvToJson(csv) {
     const lines = csv.split("\n").map(l => l.trim()).filter(l => l.length);
-    const headers = lines[0].split(",");
+    const headers = lines[0].split(",").map(h => h.trim());
     const rows = lines.slice(1).map(line => {
-        const values = line.split(",");
+        const values = line.split(",").map(v => v.trim());
         let obj = {};
-        headers.forEach((h, i) => obj[h] = values[i]);
+        headers.forEach((h, i) => obj[h] = values[i] || "");
         return obj;
     });
     return rows;
@@ -142,8 +37,10 @@ fetch(csvURL)
     .then(res => res.text())
     .then(csv => {
         const data = csvToJson(csv);
+        console.log("Dados da planilha carregados:", data);
 
-        const row = data.find(r => r["Código Fixo"] === codigoFixo);
+        // Busca ignorando espaços e nulo
+        const row = data.find(r => r["Código Fixo"]?.trim() === codigoFixo);
 
         if (!row) {
             alert("Nenhum registro encontrado para esse Código Fixo!");
@@ -162,15 +59,10 @@ fetch(csvURL)
         document.getElementById("inicio").innerText = row["Data de Início"];
         document.getElementById("termino").innerText = row["Data de Término"];
 
-        // Gera o link completo para QR atualizado
+        // Gera QR Code apontando para esta mesma página
         const fullLink = window.location.href;
-
-        // Gera QR Code
         document.getElementById("qrImg").src =
             "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" + encodeURIComponent(fullLink);
-    });
+    })
+    .catch(err => console.error("Erro ao buscar planilha:", err));
 </script>
-
-
-</body>
-</html>
