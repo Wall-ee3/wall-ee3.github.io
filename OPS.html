@@ -108,67 +108,69 @@
 <button class="btn2" onclick="window.print()">Imprimir</button>
 
 <script>
-const sheetID = "1i2mCgUtb6swVZ8PAyA8HwnO-jVPwPurIywReqZfqChs";
-const range = "Página1"; 
-
+// Função para coletar parâmetros da URL
 function getParam(name) {
     const url = new URL(window.location.href);
     return url.searchParams.get(name) || "";
 }
 
-const ID = getParam("id"); // <-- só precisa do ID agora
+// Código Fixo vindo da URL
+const codigoFixo = getParam("ID");
 
-if (!ID) {
-    alert("Nenhum ID informado.\nUse assim: ?id=11221-T");
-}
+// ID da sua planilha
+const sheetID = "1i2mCgUtb6swVZ8PAyA8HwnO-jVPwPurIywReqZfqChs";
+const sheetName = "Página1"; // Nome da aba
 
-// Busca dados no Google Sheets
-async function loadData() {
-    const url =
-        `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:json`;
+// URL em CSV da planilha
+const csvURL = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?tqx=out:csv&sheet=${sheetName}`;
 
-    const response = await fetch(url);
-    const text = await response.text();
-    const json = JSON.parse(text.substring(47, text.length - 2));
-
-    const rows = json.table.rows;
-
-    let found = null;
-
-    rows.forEach(r => {
-        const op = r.c[0]?.v || "";  // Coluna da OP
-        if (op == ID) {
-            found = r;
-        }
+// Converte CSV em JSON
+function csvToJson(csv) {
+    const lines = csv.split("\n").map(l => l.trim()).filter(l => l.length);
+    const headers = lines[0].split(",");
+    const rows = lines.slice(1).map(line => {
+        const values = line.split(",");
+        let obj = {};
+        headers.forEach((h, i) => obj[h] = values[i]);
+        return obj;
     });
-
-    if (!found) {
-        alert("OP não encontrada na planilha!");
-        return;
-    }
-
-    // Preenche os campos com as colunas da planilha
-    document.getElementById("op").innerText = found.c[0]?.v || "";
-    document.getElementById("item").innerText = found.c[1]?.v || "";
-    document.getElementById("prev").innerText = found.c[2]?.v || "";
-    document.getElementById("prod").innerText = found.c[3]?.v || "";
-    document.getElementById("status").innerText = found.c[4]?.v || "";
-    document.getElementById("obs").innerText = found.c[5]?.v || "";
-    document.getElementById("local").innerText = found.c[6]?.v || "";
-    document.getElementById("turno").innerText = found.c[7]?.v || "";
-    document.getElementById("inicio").innerText = found.c[8]?.v || "";
-    document.getElementById("termino").innerText = found.c[9]?.v || "";
-
-    // QR CODE sempre atualizado
-    const fullLink = `https://wall-ee3.github.io/OPS.html?id=${encodeURIComponent(ID)}`;
-
-    document.getElementById("qrImg").src =
-        "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" +
-        encodeURIComponent(fullLink);
+    return rows;
 }
 
-loadData();
+// Busca a linha correspondente ao Código Fixo
+fetch(csvURL)
+    .then(res => res.text())
+    .then(csv => {
+        const data = csvToJson(csv);
+
+        const row = data.find(r => r["Código Fixo"] === codigoFixo);
+
+        if (!row) {
+            alert("Nenhum registro encontrado para esse Código Fixo!");
+            return;
+        }
+
+        // Preenche os campos na tela
+        document.getElementById("op").innerText = row["OP"];
+        document.getElementById("item").innerText = row["Item"];
+        document.getElementById("prev").innerText = row["Quantidade Prevista"];
+        document.getElementById("prod").innerText = row["Quantidade Produzida"];
+        document.getElementById("status").innerText = row["Status"];
+        document.getElementById("obs").innerText = row["Observação"];
+        document.getElementById("local").innerText = row["Local"];
+        document.getElementById("turno").innerText = row["Turno"];
+        document.getElementById("inicio").innerText = row["Data de Início"];
+        document.getElementById("termino").innerText = row["Data de Término"];
+
+        // Gera o link completo para QR atualizado
+        const fullLink = window.location.href;
+
+        // Gera QR Code
+        document.getElementById("qrImg").src =
+            "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" + encodeURIComponent(fullLink);
+    });
 </script>
+
 
 </body>
 </html>
