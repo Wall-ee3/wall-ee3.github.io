@@ -8,37 +8,42 @@
 <style>
     body {
         font-family: Arial, sans-serif;
-        background: #f3f3f3;
+        background: #ffffff; /* fundo branco */
         padding: 20px;
+        color: #000; /* texto preto */
     }
 
     .card {
-        background: white;
+        background: #ffffff; /* totalmente branco */
         max-width: 500px;
         margin: auto;
         padding: 20px;
-        box-shadow: 0 0 12px rgba(0,0,0,0.2);
+        box-shadow: 0 0 12px rgba(0,0,0,0.15);
         border-radius: 12px;
+        border: 1px solid #ddd;
     }
 
     h2 {
         text-align: center;
         margin-bottom: 20px;
+        color: #000;
     }
 
     table {
         width: 100%;
         border-collapse: collapse;
+        color: #000;
     }
 
     td {
         padding: 10px;
-        border-bottom: 1px solid #ddd;
+        border-bottom: 1px solid #ccc;
     }
 
     .label {
         font-weight: bold;
         width: 40%;
+        color: #000;
     }
 
     #qr {
@@ -74,6 +79,13 @@
         .btn, .btn2 {
             display: none;
         }
+        body {
+            background: #fff;
+        }
+        .card {
+            box-shadow: none;
+            border: none;
+        }
     }
 </style>
 </head>
@@ -105,7 +117,6 @@
 </div>
 
 <button class="btn" onclick="window.print()">Salvar PDF</button>
-
 <button class="btn2" onclick="window.print()">Imprimir</button>
 
 <script>
@@ -115,10 +126,10 @@ function getParam(name) {
     return url.searchParams.get(name) || "";
 }
 
-// ID FIXO (não muda)
+// ID FIXO
 const id = getParam("ID");
 
-// Preenche os campos com os dados da URL
+// Preenche os campos
 document.getElementById("op").innerText = id;
 document.getElementById("item").innerText = getParam("Item");
 document.getElementById("prev").innerText = getParam("Prevista");
@@ -130,13 +141,11 @@ document.getElementById("turno").innerText = getParam("Turno");
 document.getElementById("inicio").innerText = getParam("Inicio");
 document.getElementById("termino").innerText = getParam("Termino");
 
-// QR CODE FIXO - sempre o mesmo link base
+// QR Code
 const qrLink = "https://wall-ee3.github.io/OPS.html?ID=" + encodeURIComponent(id);
-
 document.getElementById("qrImg").src =
     "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" +
     encodeURIComponent(qrLink);
-
 </script>
 
 </body>
