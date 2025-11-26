@@ -108,18 +108,14 @@
 <button class="btn2" onclick="window.print()">Imprimir</button>
 
 <script>
-// Função para coletar parâmetros
+// Função para pegar parâmetros da URL
 function getParam(name) {
     const url = new URL(window.location.href);
     return url.searchParams.get(name) || "";
 }
 
-// Pega o Código Fixo (ID) e a OP verdadeira
-const id = getParam("ID");      // Código Fixo
-const op = getParam("OP");      // OP verdadeira
-
-// Preenche campos
-document.getElementById("op").innerText = op;
+// Preenche os campos do relatório
+document.getElementById("op").innerText = getParam("OP");
 document.getElementById("item").innerText = getParam("Item");
 document.getElementById("prev").innerText = getParam("Prevista");
 document.getElementById("prod").innerText = getParam("Produzida");
@@ -130,12 +126,12 @@ document.getElementById("turno").innerText = getParam("Turno");
 document.getElementById("inicio").innerText = getParam("Inicio");
 document.getElementById("termino").innerText = getParam("Termino");
 
-// QR FIXO baseado no Código Fixo
-const qrLink = "https://wall-ee3.github.io/OPS.html?ID=" + encodeURIComponent(id);
+// QR Code do AppSheet direto
+const qrLink = getParam("QRCode");  // Espera que você passe o link do AppSheet na URL
 
 document.getElementById("qrImg").src =
-    "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" +
-    encodeURIComponent(qrLink);
+    "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" + encodeURIComponent(qrLink);
+
 </script>
 
 </body>
