@@ -115,6 +115,7 @@ function getParam(name) {
 }
 
 // Preenche os campos do relatório
+const id = getParam("ID");
 document.getElementById("op").innerText = getParam("OP");
 document.getElementById("item").innerText = getParam("Item");
 document.getElementById("prev").innerText = getParam("Prevista");
@@ -126,9 +127,19 @@ document.getElementById("turno").innerText = getParam("Turno");
 document.getElementById("inicio").innerText = getParam("Inicio");
 document.getElementById("termino").innerText = getParam("Termino");
 
-// QR Code do AppSheet direto
-const qrLink = getParam("QRCode");  // Espera que você passe o link do AppSheet na URL
+// Monta o link completo que o AppSheet gera para o QR Code
+const qrLink = "https://wall-ee3.github.io/OPS.html?ID=" + encodeURIComponent(id) +
+    "&OP=" + encodeURIComponent(getParam("OP")) +
+    "&Item=" + encodeURIComponent(getParam("Item")) +
+    "&Prevista=" + encodeURIComponent(getParam("Prevista")) +
+    "&Produzida=" + encodeURIComponent(getParam("Produzida")) +
+    "&Status=" + encodeURIComponent(getParam("Status")) +
+    "&Obs=" + encodeURIComponent(getParam("Obs")) +
+    "&Inicio=" + encodeURIComponent(getParam("Inicio")) +
+    "&Termino=" + encodeURIComponent(getParam("Termino")) +
+    "&Local=" + encodeURIComponent(getParam("Local"));
 
+// Atualiza o QR Code na página
 document.getElementById("qrImg").src =
     "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" + encodeURIComponent(qrLink);
 
