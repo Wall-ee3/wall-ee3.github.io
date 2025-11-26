@@ -46,7 +46,7 @@
         margin-top: 20px;
     }
 
-    #btnPDF {
+    .btn {
         margin-top: 20px;
         padding: 12px;
         width: 100%;
@@ -58,8 +58,20 @@
         cursor: pointer;
     }
 
+    .btn2 {
+        margin-top: 10px;
+        padding: 12px;
+        width: 100%;
+        background: #444;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
     @media print {
-        #btnPDF {
+        .btn, .btn2 {
             display: none;
         }
     }
@@ -87,59 +99,42 @@
         <tr><td class="label">Data de Término</td><td id="termino"></td></tr>
     </table>
 
-    <!-- QR CODE APARECE NO PDF -->
     <div id="qr">
         <h3>QR Code</h3>
         <img id="qrImg" src="" width="180">
     </div>
 </div>
 
-<button id="btnPDF" onclick="window.print()">Salvar PDF</button>
+<button class="btn" onclick="window.print()">Salvar PDF</button>
+
+<button class="btn2" onclick="window.print()">Imprimir</button>
 
 <script>
-// Lê os parâmetros da URL
+// Coleta parâmetros da URL
 const params = new URLSearchParams(window.location.search);
 
-// ID fixo enviado pelo AppSheet
+// ID fixo enviado pelo AppSheet (nunca muda)
 const id = params.get("ID");
 
-// Dados variáveis (opcionais, se quiser usar depois)
-const op = params.get("OP") || "";
-const item = params.get("Item") || "";
-const prevista = params.get("Prevista") || "";
-const produzida = params.get("Produzida") || "";
-const status = params.get("Status") || "";
-const obs = params.get("Obs") || "";
-const local = params.get("Local") || "";
-const inicio = params.get("Inicio") || "";
-const termino = params.get("Termino") || "";
-const turno = params.get("Turno") || "";
+// Dados variáveis
+document.getElementById("op").innerText = params.get("OP") || "";
+document.getElementById("item").innerText = params.get("Item") || "";
+document.getElementById("prev").innerText = params.get("Prevista") || "";
+document.getElementById("prod").innerText = params.get("Produzida") || "";
+document.getElementById("status").innerText = params.get("Status") || "";
+document.getElementById("obs").innerText = params.get("Obs") || "";
+document.getElementById("local").innerText = params.get("Local") || "";
+document.getElementById("inicio").innerText = params.get("Inicio") || "";
+document.getElementById("termino").innerText = params.get("Termino") || "";
+document.getElementById("turno").innerText = params.get("Turno") || "";
 
-// Preenche os campos do relatório
-document.getElementById("op").innerText = op;
-document.getElementById("item").innerText = item;
-document.getElementById("prev").innerText = prevista;
-document.getElementById("prod").innerText = produzida;
-document.getElementById("status").innerText = status;
-document.getElementById("obs").innerText = obs;
-document.getElementById("local").innerText = local;
-document.getElementById("inicio").innerText = inicio;
-document.getElementById("termino").innerText = termino;
-document.getElementById("turno").innerText = turno;
+// 🔥 QR CODE FIXO BASEADO NO ID
+const qrLink =
+    "https://wall-ee3.github.io/OPS.html?ID=" + encodeURIComponent(id);
 
-// 🔥 LINK FIXO PARA O QR CODE (NUNCA MUDA)
-const qrLink = "https://wall-ee3.github.io/OPS.html?ID=" + id;
-
-// Gera QR SEMPRE IGUAL
 document.getElementById("qrImg").src =
-    "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" + encodeURIComponent(qrLink);
-
-// IMPRESSÃO AUTOMÁTICA
-window.onload = function () {
-    setTimeout(() => {
-        window.print();
-    }, 800);
-};
+    "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" +
+    encodeURIComponent(qrLink);
 </script>
 
 </body>
