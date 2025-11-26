@@ -78,6 +78,7 @@
         <tr><td class="label">Status</td><td id="status"></td></tr>
         <tr><td class="label">Observação</td><td id="obs"></td></tr>
         <tr><td class="label">Local</td><td id="local"></td></tr>
+        <tr><td class="label">Turno</td><td id="turno"></td></tr>
         <tr><td class="label">Data de Início</td><td id="inicio"></td></tr>
         <tr><td class="label">Data de Término</td><td id="termino"></td></tr>
     </table>
@@ -104,7 +105,7 @@ const obs = params.get("Obs") || "";
 const local = params.get("Local") || "";
 const inicio = params.get("Inicio") || "";
 const termino = params.get("Termino") || "";
-
+const turno = params.get("Turno") || "";
 // Preenche os dados
 document.getElementById("op").innerText = op;
 document.getElementById("item").innerText = item;
@@ -115,7 +116,7 @@ document.getElementById("obs").innerText = obs;
 document.getElementById("local").innerText = local;
 document.getElementById("inicio").innerText = inicio;
 document.getElementById("termino").innerText = termino;
-
+document.getElementById("turno").innerText = turno;
 // URL completa que o QR deve conter
 const fullURL = window.location.href;
 
